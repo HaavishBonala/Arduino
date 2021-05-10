@@ -14,11 +14,6 @@ float humidity;
 float tempC;
 float tempF;
 int ThermistorPin = A0;
-int Vo;
-float R1 = 10000;
-float logR2, R2, T, Tf;
-int Tc;
-float c1 = 1.009249522e-03, c2 = 2.378405444e-04, c3 = 2.019202697e-07;
 
 void setup() {
   // put your setup code here, to run once:
@@ -30,18 +25,17 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   a=sr04.Distance();
-  Vo=analogRead(ThermistorPin);
-  R2=R1 * (1023.0 / (float)Vo - 1.0);
-  logR2=log(R2);
-  T=(1.0 / (c1 + c2*logR2 + c3*logR2*logR2*logR2));
-  Tc=T - 273.15;
-  Tf=(Tc * 9.0)/ 5.0 + 32.0; 
-  Tc=(Tc - 32) * 5/9 -2;
+  int tempReading = analogRead(ThermistorPin);
+  // This is OK
+  double tempK = log(10000.0 * ((1024.0 / tempReading - 1)));
+  tempK = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * tempK * tempK )) * tempK );       //  Temp Kelvin
+  int tempCC = tempK - 273.15;            // Convert Kelvin to Celcius
+  int tempFF = (tempCC * 9.0)/ 5.0 + 32.0; // Convert Celcius to Fahrenheit
   humidity=HT.readHumidity();
   tempC=HT.readTemperature();
   lcd.print("TempC:");
-  lcd.print(" B:");
-  lcd.print(Tc);
+  lcd.print(" P:");
+  lcd.print(tempCC);
   //lcd.print("C");
   lcd.print(" O:");
   lcd.print(tempC);
