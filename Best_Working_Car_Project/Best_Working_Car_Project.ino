@@ -15,7 +15,7 @@ void setup()
   pinMode(lmr,OUTPUT);
   pinMode(rm,OUTPUT);
   pinMode(rmr,OUTPUT);
-  Serial.begin(9600);
+  //Serial.begin(9600);
   irrecv.enableIRIn(); // Start the receiver
 }
 
@@ -23,45 +23,49 @@ void loop()
 {
   if (irrecv.decode(&results))
     { 
-     Serial.println(results.value, HEX);
-     irrecv.resume(); // Receive the next value
+     //Serial.println(results.value, HEX);
+     irrecv.resume();
     }
-   //bot moves front
+   //to move front
     if(results.value==0x5E35659B)
     {
-      Serial.println("hello");
+      //Serial.println("i am at front");
       digitalWrite(lm,LOW);
       digitalWrite(lmr,HIGH);
       digitalWrite(rm,HIGH);
       digitalWrite(rmr,LOW);
     }
-    //bot moves back
+    //to move back
     if(results.value==0x3C6C09C3)
     {
+      //Serial.println("i am at back");
       digitalWrite(lm,HIGH);
       digitalWrite(lmr,LOW);
       digitalWrite(rm,LOW);
       digitalWrite(rmr,HIGH);
     }
-    //bot moves left
+    //to move left
      if(results.value==0x3BD830B7)
     {
+      //Serial.println("i am at left");
       digitalWrite(lm,LOW);
       digitalWrite(lmr,HIGH);
       digitalWrite(rm,LOW);
       digitalWrite(rmr,HIGH);
     }
-    //bot moves right
+    //to move right
      if(results.value==0x9F4F514F)
     {
+      //Serial.println("i am at right");
       digitalWrite(lm,HIGH);
       digitalWrite(lmr,LOW);
       digitalWrite(rm,HIGH);
       digitalWrite(rmr,LOW);
     }
-    //bot stops
+    //to stop
     if(results.value==0xD0362DAD)
     {
+      //Serial.println("i am stoping");
       digitalWrite(lm,HIGH);
       digitalWrite(lmr,HIGH);
       digitalWrite(rm,HIGH);
